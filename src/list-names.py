@@ -1,4 +1,16 @@
 import argparse
+from typing import TextIO
+
+
+def make_library(f: TextIO) -> dict[str, str]:
+    out: dict[str, str] = {}
+    tmp = ''.join(f.readlines())
+    seqs = tmp.split('@')
+    for line in seqs:
+        if line:
+            seq = line.split('\n')
+            out[seq[0]] = seq[1]
+    return out
 
 
 def main():
@@ -10,7 +22,9 @@ def main():
     )
     args = argparser.parse_args()
 
-    print(f"Now I need to process the records in {args.fastq}")
+    lib = make_library(args.fastq)
+    out = [key for key in lib]
+    print('\n'.join(out))
 
 
 if __name__ == '__main__':
